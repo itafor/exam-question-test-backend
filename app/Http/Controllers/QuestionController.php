@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\QuestionRequest;
+use App\Http\Resources\QuestionCollection;
 use App\Http\Resources\QuestionResource;
 use App\Models\Question;
 use App\Services\QuestionServices;
@@ -18,7 +20,7 @@ class QuestionController extends Controller
         $this->question = $question_Service;
     }
 
-    public function storeNewQuestion(Request $request)
+    public function storeNewQuestion(QuestionRequest $request)
     {
     	$data = $request->all();
 
@@ -36,7 +38,7 @@ class QuestionController extends Controller
 
     	if($questions){
     		 return $this->sendResponse(
-           $questions,
+           new QuestionCollection($questions),
             "Questions successfully fetched"
         );
     }
@@ -52,6 +54,30 @@ class QuestionController extends Controller
         );
     }
     }
+
+    public function updateQuestion(QuestionRequest $request)
+    {
+        $data = $request->all();
+
+        $question_updated = $this->question->manageQuestion($data);
+
+        if($question_updated)
+        {
+        return $this->sendResponse(
+          new QuestionResource($question_updated),
+            "Question successfully updated"
+        );
+        }
+    }
+
+      public function deleteQuestion(Question $question)
+    {
+        if($question){
+            $question->delete();
+
+        return response()->json(["Question deleted successfully"]);
+    }
+}
 
  
 }

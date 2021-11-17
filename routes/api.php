@@ -39,6 +39,17 @@ Route::group(
             '/view/{question}',
             [QuestionController::class, 'viewQuestion']
         )->name('question.view');
+
+         Route::post(
+            '/update',
+            [QuestionController::class, 'updateQuestion']
+        )->name('question.update');
+
+          Route::get(
+            '/destroy/{question}',
+            [QuestionController::class, 'deleteQuestion']
+        )->name('question.destroy');
+
        
     }
 );
