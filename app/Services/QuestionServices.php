@@ -42,7 +42,7 @@ class QuestionServices
 
     public function allQuestions()
     {
-        return Question::orderBy('created_at', 'desc')->with(['options'])->get();
+        return Question::orderBy('created_at', 'desc')->get();
     }
 
       public function manageQuestion($data)
@@ -78,6 +78,9 @@ class QuestionServices
          }
      }
 
-    
+    public function filterQuestionsByCategory($category_id)
+    {
+        return Question::where('category_id', $category_id)->orderBy('created_at', 'desc')->get();
+    }
 }
 

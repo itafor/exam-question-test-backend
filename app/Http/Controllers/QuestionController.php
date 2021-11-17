@@ -55,6 +55,19 @@ class QuestionController extends Controller
         }
     }
 
+
+      public function displayQuestionsByCategory($category_id)
+    {
+        $questions = $this->question->filterQuestionsByCategory($category_id);
+
+        
+            return $this->sendResponse(
+                new QuestionCollection($questions),
+                "Questions successfully fetched"
+            );
+        
+    }
+
     public function updateQuestion(QuestionRequest $request)
     {
         $data = $request->all();

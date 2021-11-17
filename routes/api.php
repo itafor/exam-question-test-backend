@@ -50,6 +50,11 @@ Route::group(
             [QuestionController::class, 'deleteQuestion']
         )->name('question.destroy');
 
+           Route::get(
+            '/category/{category_id}/lists',
+            [QuestionController::class, 'displayQuestionsByCategory']
+        )->name('question.filter.bycategory');
+
        
     }
 );
