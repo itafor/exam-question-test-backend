@@ -8,51 +8,51 @@ use App\Http\Resources\QuestionResource;
 use App\Models\Question;
 use App\Services\QuestionServices;
 use Illuminate\Http\Request;
+use MarcinOrlowski\ResponseBuilder\ResponseBuilder;
 
 class QuestionController extends Controller
 {
-
-	public $question;
+    public $question;
 
     public function __construct(QuestionServices $question_Service)
     {
-       
         $this->question = $question_Service;
     }
 
     public function storeNewQuestion(QuestionRequest $request)
     {
-    	$data = $request->all();
+        $data = $request->all();
 
-    	$question_stored = $this->question->createNewQuestion($data);
+        $question_stored = $this->question->createNewQuestion($data);
 
-    	if($question_stored)
-    	{
-    		return response()->json(['message' => 'New question created successfully']);
-    	}
+        if ($question_stored) {
+            return ResponseBuilder::asSuccess()
+            ->withMessage('New question created successfully')
+            ->withData(['question' => new QuestionResource($question_stored)])
+            ->build();
+        }
     }
 
     public function getAllQuestions()
     {
-    	$questions = $this->question->allQuestions();
+        $questions = $this->question->allQuestions();
 
-    	if($questions){
-    		 return $this->sendResponse(
-           new QuestionCollection($questions),
-            "Questions successfully fetched"
-        );
-    }
-    
+        if ($questions) {
+            return $this->sendResponse(
+                new QuestionCollection($questions),
+                "Questions successfully fetched"
+            );
+        }
     }
 
-     public function viewQuestion(Question $question)
+    public function viewQuestion(Question $question)
     {
-       	if($question){
-    		 return $this->sendResponse(
-          new QuestionResource($question),
-            "Question successfully fetched"
-        );
-    }
+        if ($question) {
+            return $this->sendResponse(
+                new QuestionResource($question),
+                "Question successfully fetched"
+            );
+        }
     }
 
     public function updateQuestion(QuestionRequest $request)
@@ -61,23 +61,20 @@ class QuestionController extends Controller
 
         $question_updated = $this->question->manageQuestion($data);
 
-        if($question_updated)
-        {
-        return $this->sendResponse(
-          new QuestionResource($question_updated),
-            "Question successfully updated"
-        );
+        if ($question_updated) {
+            return $this->sendResponse(
+                new QuestionResource($question_updated),
+                "Question successfully updated"
+            );
         }
     }
 
-      public function deleteQuestion(Question $question)
+    public function deleteQuestion(Question $question)
     {
-        if($question){
+        if ($question) {
             $question->delete();
 
-        return response()->json(["Question deleted successfully"]);
+            return response()->json(["Question deleted successfully"]);
+        }
     }
-}
-
- 
 }
