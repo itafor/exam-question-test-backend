@@ -55,6 +55,11 @@ Route::group(
             [QuestionController::class, 'displayQuestionsByCategory']
         )->name('question.filter.bycategory');
 
+            Route::get(
+            '/categories',
+            [QuestionController::class, 'questionCategories']
+        )->name('question.categories');
+
        
     }
 );

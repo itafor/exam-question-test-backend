@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\QuestionRequest;
 use App\Http\Resources\QuestionCollection;
 use App\Http\Resources\QuestionResource;
+use App\Models\Category;
 use App\Models\Question;
 use App\Services\QuestionServices;
 use Illuminate\Http\Request;
@@ -89,5 +90,15 @@ class QuestionController extends Controller
 
             return response()->json(["Question deleted successfully"]);
         }
+    }
+
+    public function questionCategories()
+    {
+        $categories = Category::all();
+
+        return $this->sendResponse(
+               $categories,
+                "Question categories successfully fetched"
+            );
     }
 }
